@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScratchConsole", "ScratchConsole\ScratchConsole.csproj", "{F2114D5C-C7D1-45C3-9B96-9311C0161D72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScratchConsole.Test", "ScratchConsole.Test\ScratchConsole.Test.csproj", "{DFCF7384-FA19-4086-98C0-EC4B7BED8CB2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2114D5C-C7D1-45C3-9B96-9311C0161D72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2114D5C-C7D1-45C3-9B96-9311C0161D72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2114D5C-C7D1-45C3-9B96-9311C0161D72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2114D5C-C7D1-45C3-9B96-9311C0161D72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFCF7384-FA19-4086-98C0-EC4B7BED8CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFCF7384-FA19-4086-98C0-EC4B7BED8CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFCF7384-FA19-4086-98C0-EC4B7BED8CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFCF7384-FA19-4086-98C0-EC4B7BED8CB2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {680C4E94-13EF-44D8-9BE2-8AE2126BA66F}
+	EndGlobalSection
+EndGlobal
