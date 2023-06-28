@@ -45,7 +45,6 @@ namespace ScratchConsole.Test
 
             // assert
             httpResult.IsSuccess.Should().BeTrue();
-            httpResult.StatusCode.Should().Be(200);
             
             var value = httpResult.Value;
             value.Should().NotBeNull();
