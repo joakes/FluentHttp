@@ -6,29 +6,51 @@ namespace ScratchConsole.FluidHttp.HttpBuilder;
 internal class HttpBuilderWithResponseAndProblemDetails<TResponse, TProblem> : HttpBuilderWithResponse<TResponse>
 {
     protected IEnumerable<int> ProblemDetailResponseCodes { get; }
+    private Action<Exception>? _handler;
 
+    
     public HttpBuilderWithResponseAndProblemDetails(IEnumerable<int> responseCodes, HttpClient client, HttpRequestMessage request) : base(client, request)
     {
         ProblemDetailResponseCodes = responseCodes;
     }
 
+    public HttpBuilderWithResponseAndProblemDetails<TResponse, TProblem> WithExceptionHandler(Action<Exception> handler)
+    {
+        _handler = handler;
+        return this;
+    }
+
     public new async Task<RestResult<TResponse, TProblem>> SendAsync(CancellationToken token = default)
     {
-        var response = await Client.SendAsync(Request, token);
+        HttpResponseMessage? response = null;
 
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var value = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: token);
-            return RestResult.Success<TResponse, TProblem>(value!, response);
-        }
+            response = await Client.SendAsync(Request, token);
 
-        // handle problem details
-        if (ProblemDetailResponseCodes.Contains((int)response.StatusCode))
+            if (response.IsSuccessStatusCode)
+            {
+                var value = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: token);
+                return RestResult.Success<TResponse, TProblem>(value!, response);
+            }
+
+            // handle problem details
+            if (ProblemDetailResponseCodes.Contains((int)response.StatusCode))
+            {
+                var problem = await response.Content.ReadFromJsonAsync<TProblem>(cancellationToken: token);
+                return RestResult.Failure<TResponse, TProblem>(problem!, response);
+            }
+
+            return RestResult.Failure<TResponse, TProblem>(response);
+        }
+        catch (Exception ex)
         {
-            var problem = await response.Content.ReadFromJsonAsync<TProblem>(cancellationToken: token);
-            return RestResult.Failure<TResponse, TProblem>(problem!, response);
+            if (_handler is not null)
+            {
+                _handler(ex);
+                return RestResult.Failure<TResponse, TProblem>(response);
+            }
+            throw;
         }
-
-        return RestResult.Failure<TResponse, TProblem>(response);
     }
 }

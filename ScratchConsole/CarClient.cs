@@ -21,7 +21,11 @@ namespace ScratchConsole
         public async Task<RestResult<Car>> FindCarNoProblemAsync(string carId, CancellationToken token = default)
         {
             var url = $"car?name={carId}";
-            return await _client.Get<Car>(url).SendAsync(token);
+            
+            return await _client
+                .Get<Car>(url)
+                .WithExceptionHandler(ex => { })
+                .SendAsync(token);
         }
 
         public async Task<RestResult<Car, ProblemDetails>> FindCarAsync(string carId, CancellationToken token = default)
@@ -31,6 +35,7 @@ namespace ScratchConsole
             var result = await _client
                 .Get<Car>(url)
                 .WithProblemDetails<ProblemDetails>(400, 500)
+                .WithExceptionHandler(ex => { })
                 .SendAsync(token);
 
             return result;
@@ -41,8 +46,9 @@ namespace ScratchConsole
             var url = "/car/123";
 
             var result = await _client
-                .Post<CarUpdate, CarUpdateResponse>(url, update)
+                .Post<CarUpdate, CarUpdateResponse>(url, update)                
                 .WithProblemDetails<ProblemDetails>(400, 500)
+                .WithExceptionHandler(ex => { })
                 .SendAsync(token);
 
             return result;
@@ -55,6 +61,7 @@ namespace ScratchConsole
             var result = await _client
                 .Post(url, createCar)
                 .WithProblemDetails<ProblemDetails>(400, 500)
+                .WithExceptionHandler(ex => { /* log this */ })
                 .SendAsync(token);
 
             return result;
@@ -64,25 +71,12 @@ namespace ScratchConsole
         {
             var url = "/car";
 
-            return await 
-                TryHttp(() => 
-                    _client
-                        .Post(url, createCar)
-                        .SendAsync(token));
-        }
+            var result = await _client
+                .Post(url, createCar)
+                .WithExceptionHandler(ex => { })
+                .SendAsync(token);
 
-        private static async Task<TResult> TryHttp<TResult>(
-            Func<Task<TResult>> func, 
-            Func<TResult> defaultValueOnFailure = default)
-        {
-            try
-            {
-                return await func();
-            }
-            catch (Exception ex)
-            {
-                return defaultValueOnFailure();
-            }
+                return result;
         }
     }
 }

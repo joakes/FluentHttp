@@ -6,13 +6,15 @@ internal readonly struct RestResult : IRestResult
     public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;
 
-    internal RestResult(HttpResponseMessage response)
+    internal RestResult(HttpResponseMessage? response)
     {
-        IsSuccess = response.IsSuccessStatusCode;
-        ResponseMessage = response;
+        IsSuccess = response?.IsSuccessStatusCode ?? false;
+        ResponseMessage = response!;
     }
 
-    public static implicit operator RestResult(HttpResponseMessage response) => new(response);
+    public static implicit operator RestResult(HttpResponseMessage? response) => new(response);
+
+    internal static RestResult Failure() => new(null);
 
     // RestResult<T>
     internal static RestResult<T> Success<T>(T value, HttpResponseMessage response) => new(true, string.Empty, value, response);

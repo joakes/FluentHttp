@@ -6,29 +6,52 @@ namespace ScratchConsole.FluidHttp.HttpBuilder;
 internal class HttpBuilderWithRequestAndProblemDetails<TRequest, TProblem> : HttpBuilderWithRequest<TRequest>
 {
     protected IEnumerable<int> ProblemDetailResponseCodes { get; }
+    private Action<Exception>? _handler;
 
     public HttpBuilderWithRequestAndProblemDetails(IEnumerable<int> responseCode, HttpClient client, HttpRequestMessage request) : base(client, request)
     {
         ProblemDetailResponseCodes = responseCode;
     }
 
+    public HttpBuilderWithRequestAndProblemDetails<TRequest, TProblem> WithExceptionHandler(Action<Exception> handler)
+    {
+        _handler = handler;
+        return this;
+    }
+
     public new async Task<RestUnitResult<TProblem>> SendAsync(CancellationToken token = default)
     {
-        var response = await Client.SendAsync(Request, token);
+        HttpResponseMessage? response = null;
 
-        // handle success
-        if (response.IsSuccessStatusCode)
+        try
         {
-            return RestUnitResult.Success<TProblem>(response);
-        }
+            response = await Client.SendAsync(Request, token);
 
-        // handle problem details
-        if (ProblemDetailResponseCodes.Contains((int)response.StatusCode))
+            // handle success
+            if (response.IsSuccessStatusCode)
+            {
+                return RestUnitResult.Success<TProblem>(response);
+            }
+
+            // handle problem details
+            if (ProblemDetailResponseCodes.Contains((int)response.StatusCode))
+            {
+                var problem = await response.Content.ReadFromJsonAsync<TProblem>(cancellationToken: token);
+                return RestUnitResult.Failure(problem!, response);
+            }
+
+            return RestUnitResult.Failure<TProblem>(response);
+        }
+        catch (Exception ex) 
         {
-            var problem = await response.Content.ReadFromJsonAsync<TProblem>(cancellationToken: token);
-            return RestUnitResult.Failure(problem!, response);
-        }
+            if (_handler != null)
+            {
+                _handler(ex);
+                return RestUnitResult.Failure<TProblem>(response!);
+            }
 
-        return RestUnitResult.Failure<TProblem>(response);
+            // no exception handler defined
+            throw;
+        }
     }
 }

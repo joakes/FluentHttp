@@ -2,7 +2,7 @@
 
 namespace ScratchConsole.FluidHttp.HttpBuilder;
 
-internal class HttpBuilder
+internal abstract class HttpBuilder
 {
     protected HttpClient Client { get; }
     protected HttpRequestMessage Request { get; }
@@ -11,7 +11,5 @@ internal class HttpBuilder
     {
         Client = client;
         Request = request;
-    }
-
-    public async virtual Task<RestResult> SendAsync(CancellationToken token = default) => await Client.SendAsync(Request, token);
+    } 
 }
