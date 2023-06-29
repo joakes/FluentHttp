@@ -8,7 +8,7 @@
         public bool IsSuccess { get; }
         public bool IsError => !IsSuccess;
 
-        private Result(TValue value) 
+        private Result(TValue value)
         {
             IsSuccess = true;
             _value = value;
@@ -22,7 +22,7 @@
             _value = default;
         }
 
-        public static implicit operator Result<TValue, TError>(TValue value) => new (value);
-        public static implicit operator Result<TValue, TError>(TError error) => new (error);
+        public static implicit operator Result<TValue, TError>(TValue value) => new(value);
+        public static implicit operator Result<TValue, TError>(TError error) => new(error);
     }
 }

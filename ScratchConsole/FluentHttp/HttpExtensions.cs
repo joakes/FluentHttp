@@ -1,7 +1,7 @@
-﻿using System.Net.Http.Json;
-using ScratchConsole.FluidHttp.HttpBuilder;
+﻿using ScratchConsole.FluentHttp.HttpBuilder;
+using System.Net.Http.Json;
 
-namespace ScratchConsole.HttpExtensions
+namespace ScratchConsole.FluentHttp
 {
     internal static class HttpExtensions
     {

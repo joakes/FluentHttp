@@ -1,4 +1,4 @@
-﻿namespace ScratchConsole.FluidHttp.Result;
+﻿namespace ScratchConsole.FluentHttp.Result;
 
 internal readonly struct RestResult : IRestResult
 {

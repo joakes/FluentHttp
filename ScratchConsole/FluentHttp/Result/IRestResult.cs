@@ -1,4 +1,4 @@
-﻿namespace ScratchConsole.FluidHttp.Result;
+﻿namespace ScratchConsole.FluentHttp.Result;
 public interface IRestResult
 {
     bool IsSuccess { get; }

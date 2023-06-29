@@ -1,7 +1,7 @@
-﻿using ScratchConsole.FluidHttp.Result;
+﻿using ScratchConsole.FluentHttp.Result;
 using System.Net.Http.Json;
 
-namespace ScratchConsole.FluidHttp.HttpBuilder;
+namespace ScratchConsole.FluentHttp.HttpBuilder;
 
 internal class HttpBuilderWithResponse<TResponse> : HttpBuilder
 {
@@ -15,7 +15,7 @@ internal class HttpBuilderWithResponse<TResponse> : HttpBuilder
         return this;
     }
 
-    public new async Task<RestResult<TResponse>> SendAsync(CancellationToken token)
+    public async Task<RestResult<TResponse>> SendAsync(CancellationToken token)
     {
         HttpResponseMessage? response = null;
 

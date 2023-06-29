@@ -1,5 +1,4 @@
-﻿using Flurl;
-using Flurl.Http;
+﻿using Flurl.Http;
 
 internal class Program
 {
@@ -7,13 +6,13 @@ internal class Program
     {
         Console.WriteLine("hello");
 
-		try
-		{
-			var result = await "https://www.google.com".PostAsync();
-		}
-		catch (Exception ex)
-		{
-		
-		}
+        try
+        {
+            var result = await "https://www.google.com".PostAsync();
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 }

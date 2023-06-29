@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using ScratchConsole.FluidHttp.Result;
-using ScratchConsole.HttpExtensions;
+using ScratchConsole.FluentHttp;
+using ScratchConsole.FluentHttp.Result;
 using ScratchConsole.Models;
 using System.Runtime.CompilerServices;
 
@@ -21,7 +21,7 @@ namespace ScratchConsole
         public async Task<RestResult<Car>> FindCarNoProblemAsync(string carId, CancellationToken token = default)
         {
             var url = $"car?name={carId}";
-            
+
             return await _client
                 .Get<Car>(url)
                 .WithExceptionHandler(ex => { })
@@ -41,12 +41,12 @@ namespace ScratchConsole
             return result;
         }
 
-        public async Task<RestResult<CarUpdateResponse, ProblemDetails>> UpdateCar(CarUpdate update, CancellationToken token = default)
+        public async Task<RestResult<UpdateCarResponse, ProblemDetails>> UpdateCar(UpdateCarRequest update, CancellationToken token = default)
         {
             var url = "/car/123";
 
             var result = await _client
-                .Post<CarUpdate, CarUpdateResponse>(url, update)                
+                .Post<UpdateCarRequest, UpdateCarResponse>(url, update)
                 .WithProblemDetails<ProblemDetails>(400, 500)
                 .WithExceptionHandler(ex => { })
                 .SendAsync(token);
@@ -76,7 +76,7 @@ namespace ScratchConsole
                 .WithExceptionHandler(ex => { })
                 .SendAsync(token);
 
-                return result;
+            return result;
         }
     }
 }

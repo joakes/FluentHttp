@@ -1,20 +1,20 @@
-﻿using ScratchConsole.FluidHttp.Result;
+﻿using ScratchConsole.FluentHttp.Result;
 using System.Net.Http.Json;
 
-namespace ScratchConsole.FluidHttp.HttpBuilder;
+namespace ScratchConsole.FluentHttp.HttpBuilder;
 
 internal class HttpBuilderWithResponseAndProblemDetails<TResponse, TProblem> : HttpBuilderWithResponse<TResponse>
 {
     protected IEnumerable<int> ProblemDetailResponseCodes { get; }
     private Action<Exception>? _handler;
 
-    
+
     public HttpBuilderWithResponseAndProblemDetails(IEnumerable<int> responseCodes, HttpClient client, HttpRequestMessage request) : base(client, request)
     {
         ProblemDetailResponseCodes = responseCodes;
     }
 
-    public HttpBuilderWithResponseAndProblemDetails<TResponse, TProblem> WithExceptionHandler(Action<Exception> handler)
+    public new HttpBuilderWithResponseAndProblemDetails<TResponse, TProblem> WithExceptionHandler(Action<Exception> handler)
     {
         _handler = handler;
         return this;

@@ -1,6 +1,4 @@
-﻿using ScratchConsole.FluidHttp.Result;
-
-namespace ScratchConsole.FluidHttp.HttpBuilder;
+﻿namespace ScratchConsole.FluentHttp.HttpBuilder;
 
 internal abstract class HttpBuilder
 {
@@ -11,5 +9,5 @@ internal abstract class HttpBuilder
     {
         Client = client;
         Request = request;
-    } 
+    }
 }

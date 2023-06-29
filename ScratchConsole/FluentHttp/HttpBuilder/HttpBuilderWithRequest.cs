@@ -1,6 +1,6 @@
-﻿using ScratchConsole.FluidHttp.Result;
+﻿using ScratchConsole.FluentHttp.Result;
 
-namespace ScratchConsole.FluidHttp.HttpBuilder;
+namespace ScratchConsole.FluentHttp.HttpBuilder;
 
 internal class HttpBuilderWithRequest<TRequest> : HttpBuilder
 {
@@ -12,6 +12,12 @@ internal class HttpBuilderWithRequest<TRequest> : HttpBuilder
 
     public HttpBuilderWithRequestAndProblemDetails<TRequest, TProblemDetails> WithProblemDetails<TProblemDetails>(params int[] responseCodeScope)
         => new(responseCodeScope, Client, Request);
+
+    internal HttpBuilderWithRequest<TRequest> WithExceptionHandler(Action<Exception> handler)
+    {
+        _handler = handler;
+        return this;
+    }
 
     public async virtual Task<RestResult> SendAsync(CancellationToken token = default)
     {
@@ -28,11 +34,5 @@ internal class HttpBuilderWithRequest<TRequest> : HttpBuilder
             }
             throw;
         }
-    }
-
-    internal HttpBuilderWithRequest<TRequest> WithExceptionHandler(Action<Exception> handler)
-    {
-        _handler = handler;
-        return this;
     }
 }

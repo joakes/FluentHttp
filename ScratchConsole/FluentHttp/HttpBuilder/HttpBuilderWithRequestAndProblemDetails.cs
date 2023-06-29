@@ -1,7 +1,7 @@
-﻿using ScratchConsole.FluidHttp.Result;
+﻿using ScratchConsole.FluentHttp.Result;
 using System.Net.Http.Json;
 
-namespace ScratchConsole.FluidHttp.HttpBuilder;
+namespace ScratchConsole.FluentHttp.HttpBuilder;
 
 internal class HttpBuilderWithRequestAndProblemDetails<TRequest, TProblem> : HttpBuilderWithRequest<TRequest>
 {
@@ -13,7 +13,7 @@ internal class HttpBuilderWithRequestAndProblemDetails<TRequest, TProblem> : Htt
         ProblemDetailResponseCodes = responseCode;
     }
 
-    public HttpBuilderWithRequestAndProblemDetails<TRequest, TProblem> WithExceptionHandler(Action<Exception> handler)
+    public new HttpBuilderWithRequestAndProblemDetails<TRequest, TProblem> WithExceptionHandler(Action<Exception> handler)
     {
         _handler = handler;
         return this;
@@ -42,9 +42,9 @@ internal class HttpBuilderWithRequestAndProblemDetails<TRequest, TProblem> : Htt
 
             return RestUnitResult.Failure<TProblem>(response);
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
-            if (_handler != null)
+            if (_handler is not null)
             {
                 _handler(ex);
                 return RestUnitResult.Failure<TProblem>(response!);
