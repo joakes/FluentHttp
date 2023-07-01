@@ -26,7 +26,9 @@ internal class HttpBuilderWithResponse<TResponse> : HttpBuilder
             if (response.IsSuccessStatusCode)
             {
                 var value = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: token);
-                return RestResult.Success(value!, response);
+                return value is not null ?
+                    RestResult.Success(value, response) :
+                    RestResult.Failure<TResponse>(response, $"Failed to deserialize response body to type {typeof(TResponse).Namespace}");
             }
 
             return RestResult.Failure<TResponse>(response, "Http request retured non-success status code");

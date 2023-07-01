@@ -16,6 +16,9 @@ internal readonly struct RestResult<T> : IRestResult<T>
 
     public RestResult(bool isSuccess, string error, T value, HttpResponseMessage responseMessage)
     {
+        if (isSuccess)
+            ArgumentNullException.ThrowIfNull(value, typeof(T).Name);
+
         _error = error;
         _value = value;
         IsSuccess = isSuccess;

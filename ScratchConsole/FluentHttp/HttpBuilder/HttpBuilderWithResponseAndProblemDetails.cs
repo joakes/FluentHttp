@@ -31,7 +31,10 @@ internal class HttpBuilderWithResponseAndProblemDetails<TResponse, TProblem> : H
             if (response.IsSuccessStatusCode)
             {
                 var value = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: token);
-                return RestResult.Success<TResponse, TProblem>(value!, response);
+                
+                return value is not null ?
+                    RestResult.Success<TResponse, TProblem>(value, response) :
+                    RestResult.Failure<TResponse, TProblem>(default!, response);
             }
 
             // handle problem details
